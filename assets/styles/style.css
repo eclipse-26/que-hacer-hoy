@@ -12,7 +12,7 @@ ol, li, ul{
   @supports (font-variation-settings: normal) {
     @font-face {
       font-family: "JetBrains Mono";
-      src: url("fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf") format(woff2) tech(variations);  /* Sintaxis moderna */
+      src: url("../fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf") format(woff2) tech(variations);  /* Sintaxis moderna */
       font-weight: 100 800;
       font-style: 0 1;
     }
@@ -102,7 +102,7 @@ h1, h2, #start p, #title-container span{
         top: 0;
         left: 0;
         width: 100%;
-        mask-image: url(icons/test-mask.svg);
+        mask-image: url(../icons/test-mask.svg);
         mask-size: 300px;
         mask-repeat: no-repeat;
         opacity: 0;

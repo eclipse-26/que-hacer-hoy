@@ -4,8 +4,6 @@
 let goalsContainer = document.getElementById("goals");
 let btnAdd = document.getElementById("add");
 
-export {btnAdd}
-
 const header = document.getElementById("header");
 const btnRestart = document.getElementById("restart");
 const containerAdd = document.getElementById("add-container")
@@ -15,12 +13,12 @@ const goalsCount = document.getElementById("goals-count");
 const goalsCompleted = document.getElementById("goals-completed");
 const expWin = document.getElementById("exp");
 
-const music = new Audio("sounds/music.mp3");
+const music = new Audio("assets/sounds/music.mp3");
 music.volume = 0.2;
-const goalAddSound = new Audio("sounds/add-goal.mp3");
-const goalRemoveSound = new Audio("sounds/remove-goal.mp3");
+const goalAddSound = new Audio("assets/sounds/add-goal.mp3");
+const goalRemoveSound = new Audio("assets/sounds/remove-goal.mp3");
 goalRemoveSound.volume = 0.2;
-const goalCompleteSound = new Audio("sounds/complete-goal.mp3");
+const goalCompleteSound = new Audio("assets/sounds/complete-goal.mp3");
 
 
 addEventListener("load", ()=>{
