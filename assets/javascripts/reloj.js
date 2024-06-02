@@ -1,5 +1,5 @@
-const hour = document.getElementById("current-hour");
-const min = document.getElementById("current-min");
+const hour = document.getElementById("clock__hour");
+const min = document.getElementById("clock__min");
 
 let time = new Date();
 

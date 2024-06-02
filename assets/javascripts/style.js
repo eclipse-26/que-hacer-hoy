@@ -1,7 +1,7 @@
 "use strict"
 
-const titleContainer = document.getElementById("title-container");
-const back = document.getElementById("back");
+const titleContainer = document.getElementById("title");
+const back = document.getElementById("title__back");
 
 
 titleContainer.addEventListener("mousemove", (e)=>{

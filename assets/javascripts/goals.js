@@ -1,16 +1,16 @@
 "use strict"
 
 
-let goalsContainer = document.getElementById("goals");
-let btnAdd = document.getElementById("add");
+let goalsContainer = document.getElementById("goal__list");
+let btnAdd = document.getElementById("add-goal__btn");
 
-const header = document.getElementById("header");
-const btnRestart = document.getElementById("restart");
-const containerAdd = document.getElementById("add-container")
+const header = document.getElementById("app__header");
+const btnRestart = document.getElementById("footer__restart-btn");
+const containerAdd = document.getElementById("add-goal")
 
-const goalsCompletedContainer = document.getElementById("goals-completed-container");
-const goalsCount = document.getElementById("goals-count");
-const goalsCompleted = document.getElementById("goals-completed");
+const goalsCompletedContainer = document.getElementById("goal-progress");
+const goalsCount = document.getElementById("goals__count");
+const goalsCompleted = document.getElementById("goals__completed");
 const expWin = document.getElementById("exp");
 
 const music = new Audio("assets/sounds/music.mp3");
@@ -26,7 +26,7 @@ addEventListener("load", ()=>{
     music.loop = true;
     music.volume = 0.2;
 
-    if(document.querySelector(".goal")){
+    if(document.querySelector(".goal__item")){
         music.loop = false;
     }
 })
@@ -44,8 +44,8 @@ const formatNum = (num) =>{
 }
 
 const newHour = () =>{
-    const hour = document.querySelectorAll(".hour");
-    const currentHour = document.getElementById("current-hour").textContent
+    const hour = document.querySelectorAll(".goal__info__hour");
+    const currentHour = document.getElementById("clock__hour").textContent
     let newHour = parseInt(currentHour) + 1;
 
     if(hour.length > 0){
@@ -55,14 +55,6 @@ const newHour = () =>{
     return formatNum(newHour);
 }
 
-const getHourTemp = (goalsNode) =>{
-    let lastHour = document.querySelectorAll(".time .hour")
-    if(goalsNode.length > 0){
-        return formatNum(parseInt(lastHour[goalsNode.length - 1].value) + 1)
-    }else{
-        return formatNum(parseInt(document.getElementById("current-hour").textContent) + 1);
-    }
-}
 
 btnRestart.addEventListener("click", ()=>{
     document.querySelector("main").classList.remove("active");
@@ -99,7 +91,7 @@ btnAdd.addEventListener("click", ()=>{
 });
 
 const goalsCompletedUpdate = () =>{
-    goalsCompleted.textContent = document.querySelectorAll(".completed").length;
+    goalsCompleted.textContent = document.querySelectorAll(".goal__item--completed").length;
 
     if(goalsCompleted.textContent == goalsCount.textContent){
         setTimeout(()=>{
@@ -120,7 +112,7 @@ let expInitial = true;
 const experienceWined = () =>{
     
 
-    const total = document.querySelectorAll(".completed").length * 100;
+    const total = document.querySelectorAll(".goal__item--completed").length * 100;
 
     if(expInitial){
         expWin.textContent = total;
@@ -174,18 +166,18 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
     let completeBtn = document.createElement("A");
     let moveBtn = document.createElement("A");
 
-    goal.classList.add("goal");
-    info.classList.add("info");
-    num.classList.add("num");
-    time.classList.add("time");
-    hour.classList.add("hour");
-    min.classList.add("min");
-    title.classList.add("title");
-    exp.classList.add("exp");
-    options.classList.add("options");
-    deleteBtn.classList.add("delete");
-    completeBtn.classList.add("complete");
-    moveBtn.classList.add("move");
+    goal.classList.add("goal__item");
+    info.classList.add("goal__info");
+    num.classList.add("goal__info__num");
+    time.classList.add("goal__info__time");
+    hour.classList.add("goal__info__hour");
+    min.classList.add("goal__info__min");
+    title.classList.add("goal__info__title");
+    exp.classList.add("goal__info__exp");
+    options.classList.add("goal__options");
+    deleteBtn.classList.add("goal__options__delete");
+    completeBtn.classList.add("goal__options__complete");
+    moveBtn.classList.add("goal__options__move");
 
     title.placeholder = "Escribe tu objetivo...";
     title.value = newTitle;
@@ -209,7 +201,7 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
     
 
     if(completed){
-        goal.classList.add("completed")
+        goal.classList.add("goal__item--completed")
     }
 
 
@@ -278,7 +270,7 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
     })
 
     completeBtn.addEventListener("click", () =>{
-        if(!goal.classList.contains("completed")){
+        if(!goal.classList.contains("goal__item--completed")){
             completeObjetive(id, goal, completed, completeBtn, hour, min, title);
         }else{
             updateCompleteState(id, goal, completeBtn, completed, hour, min, title);
@@ -304,8 +296,8 @@ const createSpanComplete = (isCompleted, completeBtn) =>{
 }
 
 const updateCompleteState = (id, goal, completeBtn, completed, hour, min, title) =>{
-    goal.classList.toggle("completed");
-        createSpanComplete(goal.classList.contains("completed"), completeBtn);
+    goal.classList.toggle("goal__item--completed");
+        createSpanComplete(goal.classList.contains("goal__item--completed"), completeBtn);
 
         experienceWined();
         goalsCompletedUpdate();
@@ -339,8 +331,8 @@ const completeObjetive = (id, goal, completed, completeBtn, hour, min, title) =>
     completeCancel.textContent = "Aún no";
     completeConfirm.textContent = "Sí";
 
-    completeContainer.classList.add("complete-container");
-    completeOptions.classList.add("complete-options");
+    completeContainer.classList.add("goal__item__complete-container");
+    completeOptions.classList.add("complete-container__complete-options");
 
     completeContainer.appendChild(completeText);
     completeContainer.appendChild(completeOptions);
@@ -383,8 +375,8 @@ const deleteObjetive = (id, goal) =>{
     deleteCancel.textContent = "Cancelar";
     deleteConfirm.textContent = "Sí, borrar";
 
-    deleteContainer.classList.add("delete-container");
-    deleteOptions.classList.add("delete-options");
+    deleteContainer.classList.add("goal__item__delete-container");
+    deleteOptions.classList.add("delete-container__delete-options");
 
     deleteContainer.appendChild(deleteText);
     deleteContainer.appendChild(deleteOptions);
@@ -405,7 +397,7 @@ const deleteObjetive = (id, goal) =>{
 
     deleteConfirm.addEventListener("click", ()=>{
 
-        if(document.querySelectorAll(".goal").length == 1){
+        if(document.querySelectorAll(".goal__item").length == 1){
             const allElements = document.querySelectorAll('.active')
             allElements.forEach(el => el.classList.remove('active'))
             containerAdd.classList.add("inactive");
@@ -426,19 +418,19 @@ const deleteObjetive = (id, goal) =>{
 const idbRequest = indexedDB.open("objetivosBase", 1);
 
 idbRequest.addEventListener("upgradeneeded", () => {
-    console.log("Base de datos creada correctamente");
+    // console.log("Base de datos creada correctamente");
     const db = idbRequest.result;
     db.createObjectStore("objetivosTable", { autoIncrement: true })
 })
 
 idbRequest.addEventListener("success", () => {
-    console.log("Base de datos correcta");
+    // console.log("Base de datos correcta");
     readObjects();
     
 })
 
 idbRequest.addEventListener("error", () => {
-    console.log("Ha ocurrido un error al abrir la base de datos");
+    // console.log("Ha ocurrido un error al abrir la base de datos");
 })
 
 
@@ -451,7 +443,7 @@ const readObjects = () => {
     const cursor = transationIDB("readonly", "").openCursor();
     const fragment = document.createDocumentFragment();
 
-    document.querySelector(".goals").innerHTML = "";
+    goalsContainer.innerHTML = "";
 
     let index = 1;
     let newExp = 100;
@@ -481,8 +473,8 @@ const readObjects = () => {
 
             index++;
         } else {
-            document.querySelector(".goals").appendChild(fragment);
-            console.log("Objetos leidos correctamente");
+            document.querySelector(".goal__list").appendChild(fragment);
+            // console.log("Objetos leidos correctamente");
             if(goalsContainer.childElementCount > 0){
                 experienceWined();
                 header.classList.add("active");
@@ -495,7 +487,7 @@ const readObjects = () => {
                     music.loop = true;
                 }, 1000)
 
-                console.log("no hay elementos")
+                // console.log("no hay elementos")
                 
             }
 
@@ -528,7 +520,7 @@ const transationIDB = (mode, msg) => {
     const objStore = IDBTransation.objectStore("objetivosTable");
 
     IDBTransation.addEventListener("complete", () => {
-        console.log(msg)
+        // console.log(msg)
     })
 
     return objStore;

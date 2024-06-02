@@ -62,12 +62,12 @@ input, button{
     mix-blend-mode: color;
 } 
 
-h1, h2, #start p, #title-container span{
+h1, h2, .add-goal__text p, .title span{
     user-select: none;
     transition: font-variation-settings .4s ease;
 }
 
-#title-container :is(h1, span){
+.title :is(h1, span){
     user-select: none;
     font-variation-settings: 'wght' 800;
     font-size: 4rem;
@@ -76,7 +76,7 @@ h1, h2, #start p, #title-container span{
     }
 }
 
-#title-container {
+.title {
     position: relative;
     flex-grow: 1;
     display: flex;
@@ -92,11 +92,11 @@ h1, h2, #start p, #title-container span{
         width: 100%;
     }
 
-    & .front{
+    & .title__front{
         background-color: var(--color-light);
     }
 
-    & .back{
+    & .title__back{
         background-color: var(--color-primary);
         position: absolute;
         top: 0;
@@ -143,13 +143,13 @@ main section:last-child{
     color: var(--color-light);
     fill: var(--color-light);
     padding-inline: 0;
-    overflow: hidden;
+    /* overflow: hidden; */
     transition: width .6s ease;
 }
 
 main.active{
     
-    & #title-container .front{
+    & .title .title__front{
         background-color: var(--color-dark);
         color: var(--color-light);
         & h1{
@@ -160,7 +160,7 @@ main.active{
         
     }
 
-    & #title-container .back{
+    & .title .title__back{
         & span{
             font-size: 2rem;
             font-variation-settings: 'wght' 100;
@@ -171,13 +171,13 @@ main.active{
     & section:last-child{
         width: 80%;
 
-        & #start{
+        & .add-goal__text{
             display: none;
         }
     }
 }
 
-.container{
+.app{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -194,7 +194,7 @@ main.active{
     }
 }
 
-.add-container {
+.add-goal {
 
     transform: scale(0);
     transition: transform .4s ease;
@@ -216,7 +216,7 @@ main.active{
         left: 0;
         animation: introAdd .4s ease forwards;
 
-        & #add{
+        & .add-goal__btn{
             & svg{
                 width: 4rem;
             }
@@ -226,7 +226,7 @@ main.active{
                     width: 6rem;
                 }
 
-                & ~ #start p{
+                & ~ .add-goal__text p{
                     font-variation-settings: 'wght' 800;
                     color: var(--color-confirm);
                 }
@@ -235,7 +235,7 @@ main.active{
     }
 }
 
-#start{
+.add-goal__text{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -252,7 +252,7 @@ main.active{
     }
 }
 
-.header{
+.app__header{
     box-sizing: border-box;
     width: 100%;
     padding-inline: 30px;
@@ -267,7 +267,7 @@ main.active{
     }
 }
 
-.header > div{
+.app__header > div{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -295,14 +295,14 @@ main.active{
     }
 }
 
-.current-date{
+.clock__time{
     font-size: 1.8rem;
     background-color: var(--color-light);
     color: var(--color-dark);
     padding-inline: 0.5rem;
 }
 
-.goals-completed-ui svg{
+.header__goal-progress svg{
     fill: var(--color-tertiary);
 }
 
@@ -320,19 +320,27 @@ main.active{
     animation: goals-completed-scale .5s ease alternate infinite;
 }
 
-.experience-ui #exp::before{
+.header__exp #exp::before{
     content: "+";
 }
 
-.experience-ui svg{
+.header__exp svg{
     fill: var(--color-secundary);
 }
 
 
 
 
+.app__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex-grow: 1;
+}
 
-.goals{
+
+.goal__list{
     width: 100%;
     container-type: inline-size;
     container-name: goals;
@@ -354,7 +362,7 @@ main.active{
     animation: outGoal .3s ease forwards;
 }
 
-.goal{
+.goal__item{
     position: relative;
     font-size: 2.5rem;
     display: flex;
@@ -371,11 +379,11 @@ main.active{
         font-weight: 800;
         font-variation-settings: 'wght' 800;
 
-        & .exp{
+        & .goal__info__exp{
             opacity: 1;
         }
 
-        & .options{
+        & .goal__options{
             opacity: 1;
             transform: translateX(0%);
         }
@@ -385,7 +393,7 @@ main.active{
         }
     }
 
-    & .info{
+    & .goal__info{
         display: flex;
         align-items: center;
     }
@@ -402,12 +410,12 @@ main.active{
         }
     }
 
-    & .title{
+    & .goal__info__title{
         color: var(--color-light); 
         width: 100%;
     }
 
-    & .time{
+    & .goal__info__time{
         background-color: var(--color-primary);
         color: var(--color-dark);
         padding-inline: 0.5rem;
@@ -420,7 +428,7 @@ main.active{
         }
     }
 
-    & .exp{
+    & .goal__info__exp{
         display: flex;
         align-items: center;
         background-color: #e0e0e01a;
@@ -443,7 +451,7 @@ main.active{
         }
     }
 
-    & .options{
+    & .goal__options{
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -457,19 +465,19 @@ main.active{
             display: flex;
             transition: fill .3s ease;
         }
-        & .complete{
+        & .goal__options__complete{
             &:hover{
                 fill: var(--color-confirm);
             }
         }
 
-        & .move{
+        & .goal__options__move{
             &:hover{
                 fill: var(--color-secundary);
             }
         }
 
-        & .delete{
+        & .goal__options__delete{
             &:hover{
                 fill: var(--color-cancel);
             }
@@ -482,12 +490,12 @@ main.active{
     pointer-events: none;
 }
 
-.goal.completed{
+.goal__item.goal__item--completed{
     font-size: 2rem;
     background-color: #c8ff807a;
     color: var(--color-dark);
 
-    & .info{
+    & .goal__info{
         opacity: 0.5;
         position: relative;
 
@@ -510,19 +518,19 @@ main.active{
         pointer-events: none;
     }
 
-    & .time{
+    & .goal__info__time{
         &::before, &::after{
             background-color: var(--color-dark);
         }}
-    & .exp{
+    & .goal__info__exp{
         color: white;
         background-color: #1d1d1d2c;
     }
 
-    & .options{
+    & .goal__options{
         transform: translateX(4rem);
         opacity: 1;
-        & .complete{
+        & .goal__options__complete{
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -534,13 +542,13 @@ main.active{
     }
 
     &:hover {
-        & .options{
+        & .goal__options{
             transform: translateX(0);
         }
     }
 }
 
-.time{
+.goal__info__time{
     position: relative;
     &::before, &::after{
         content: "";
@@ -560,7 +568,7 @@ main.active{
 
 
 @container goals (max-width: 1000px) {
-    .goal{
+    .goal__item{
         font-size: 1.5rem;
         & input{
             font-size: 1.5rem;
@@ -569,7 +577,7 @@ main.active{
   }
 
 
-#add{
+.add-goal__btn{
     cursor: pointer;
     & svg{
         width: 3.5rem;
@@ -589,7 +597,7 @@ main.active{
 
 }
 
-.delete-container, .complete-container{
+.goal__item__delete-container, .goal__item__complete-container{
     position: absolute;
     left: 0;
     top: 0;
@@ -604,7 +612,7 @@ main.active{
     clip-path: inset(50% 0 50% 0);
     transition: clip-path .5s ease;
 
-    & .delete-options, .complete-options{
+    & .delete-container__delete-options, .complete-container__complete-options{
         display:flex;
         align-items: center;
         gap: 2rem;
@@ -626,7 +634,7 @@ main.active{
     }
 }
 
-.complete-container{
+.goal__item__complete-container{
     background-color: var(--color-confirm);
     color: var(--color-dark);
 }
@@ -635,7 +643,9 @@ main.active{
     clip-path: inset(0);
 }
 
-.footer {
+.app__footer {
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     justify-content: end;
     align-items: center;
@@ -666,7 +676,7 @@ main.active{
         font-size: 12px;
     }
 
-    .goal.completed {
+    .goal__item.goal__item--completed {
         font-size: 1.3rem;
             & input {
                 font-size: 1.3rem;
@@ -689,16 +699,16 @@ main.active{
         min-height: 100vh;
     }
 
-    .header {
+    .app__header {
         transform: translateY(-160%);
     }
 
     main.active {
 
-        & #title-container {
+        & .title {
             height: 20vh;
             min-height: 20vh;
-            & .front{
+            & .title__front{
                 color: var(--color-dark);
                 background-color: var(--color-light);
             }
@@ -724,30 +734,30 @@ main.active{
         width: 4rem;
     }
 
-    .header > div {
+    .app__header > div {
         & > div {
             font-size: 2rem;
         }
 
-        &.current-date-ui{
+        &.header__clock{
             display: none;
         }
     }
 
-    .goal {
+    .goal__item {
         flex-direction: column;
         font-size: 1.5rem;
             & input {
                 font-size: 1.5rem;
             }
 
-            .exp {
+            .goal__info__exp {
                 position: absolute;
                 right: 10px;
                 top: -50%;
             }
 
-            & .options {
+            & .goal__options {
                 height: 0;
                 width: 100%;
                 justify-content: space-around;
@@ -755,40 +765,40 @@ main.active{
             }
 
             &:hover{
-                & .options {
+                & .goal__options {
                     height: initial;
                 }
             }
         }
 
 
-    .goal.completed {
+        .goal__item.goal__item--completed{
         font-size: 1.3rem;
             & input {
                 font-size: 1.3rem;
             }
 
-            & .options{
+            & .goal__options{
                 transform: translateX(100%);
             }
         }
 
-    #add {
+    .add-goal__btn {
         & svg {
             width: 5rem;
         }
     }
 
-    #start {
+    .add-goal__text {
        font-size: 2rem;
        & svg {
         width: 3rem;
         }
     }
 
-    .add-container {
+    .add-goal {
         &.inactive {
-            & #add {
+            & .add-goal__btn {
                 & svg {
                     width: 6rem;
                 }
