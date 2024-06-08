@@ -5,6 +5,7 @@ let goalsContainer = document.getElementById("goal__list");
 let btnAdd = document.getElementById("add-goal__btn");
 
 const header = document.getElementById("app__header");
+const footer = document.getElementById("app__footer");
 const btnRestart = document.getElementById("footer__restart-btn");
 const containerAdd = document.getElementById("add-goal")
 
@@ -57,13 +58,57 @@ const newHour = () =>{
 
 
 btnRestart.addEventListener("click", ()=>{
-    document.querySelector("main").classList.remove("active");
-    window.indexedDB.deleteDatabase("objetivosBase");
-    header.classList.remove("active");
-    containerAdd.classList.remove("active");
-    goalsContainer.classList.add("out");
-    setTimeout(() => location.reload(), 600)
+    if(!document.querySelector(".footer__confirm-restart")){
+        confirmRestart();
+    }
 })
+
+const confirmRestart = () =>{
+    const restartContainer = document.createElement("DIV");
+    const restartOptions = document.createElement("DIV");
+    const restartText = document.createElement("P");
+    const restartCancel = document.createElement("BUTTON");
+    const restartConfirm = document.createElement("BUTTON");
+
+    restartText.textContent = "¿Quieres reiniciar los objetivos de hoy?";
+    restartCancel.textContent = "No";
+    restartConfirm.textContent = "Sí";
+
+    restartContainer.classList.add("footer__confirm-restart");
+    restartOptions.classList.add("confirm-restart__options");
+    restartCancel.classList.add("button");
+    restartConfirm.classList.add("button");
+
+    restartContainer.appendChild(restartText);
+    restartContainer.appendChild(restartOptions);
+    restartOptions.appendChild(restartCancel);
+    restartOptions.appendChild(restartConfirm);
+
+    footer.appendChild(restartContainer);
+    
+    setTimeout( () =>{
+        restartContainer.classList.add("open");
+    }, 0)
+
+    restartCancel.addEventListener("click", ()=>{
+        restartContainer.classList.remove("open");
+        setTimeout( () => restartContainer.remove(), 600);
+    })
+
+    restartConfirm.addEventListener("click", ()=>{
+        restartContainer.classList.remove("open");
+        setTimeout(()=>{
+            document.querySelector("main").classList.remove("active");
+            window.indexedDB.deleteDatabase("objetivosBase");
+            header.classList.remove("active");
+            containerAdd.classList.remove("active");
+            goalsContainer.classList.add("out");
+            setTimeout(() => location.reload(), 600)
+        }, 500)
+        
+    })
+    
+}
 
 
 

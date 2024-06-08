@@ -60,7 +60,22 @@ input, button{
     width: 300px;
     height: 300px;
     mix-blend-mode: color;
-} 
+}
+
+.button{
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: var(--color-dark);
+    font-variation-settings: 'wght' 800;
+    opacity: .5;
+    cursor: pointer;
+    transition: opacity .3s ease;
+
+    &:hover{
+        opacity: 1;
+    }
+}
 
 h1, h2, .add-goal__text p, .title span{
     user-select: none;
@@ -175,6 +190,14 @@ main.active{
             display: none;
         }
     }
+
+    & .app__footer{
+        opacity: 1;
+        height: auto;
+        & a{
+            right: 0;
+        }
+    }
 }
 
 .app{
@@ -182,7 +205,7 @@ main.active{
     flex-direction: column;
     align-items: center;
     position: relative;
-    
+    overflow: hidden;
 }
 
 @keyframes introAdd{
@@ -259,11 +282,13 @@ main.active{
     display: flex;
     justify-content: space-between;
     margin-bottom: 5rem;
-    transform: translateY(-120%);
-    transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity .3s ease;
 
     &.active{
         transform: translateY(0%);
+        opacity: 1;
     }
 }
 
@@ -644,16 +669,24 @@ main.active{
 }
 
 .app__footer {
+    display: flex;
+    position: relative;
     width: 100%;
     box-sizing: border-box;
-    display: flex;
     justify-content: end;
     align-items: center;
     padding-inline: 1rem;
+    height: 0;
+    opacity: 0;
+    transition: opacity .4s ease;
 
     & a{
         display: flex;
         cursor: pointer;
+        position: relative;
+        right: -4.5rem;
+        transition: right .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
         & svg{
             opacity: 0.5;
             transition: opacity .2s ease, width .3s ease, color .5s ease, rotate .8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -668,7 +701,47 @@ main.active{
             }
         }
     }
+
+    & .footer__confirm-restart{
+        position: absolute;
+        right: 1rem;
+        top: -220px;
+        background-color: var(--color-secundary);
+        color: var(--color-dark);
+        max-width: calc(100% - 2rem);
+        width: 400px;
+        height: 200px;
+        display: flex;
+        gap: 2rem;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        padding: 1rem;
+        box-sizing: border-box;
+        text-align: center;
+        font-weight: 800;
+        border-radius: 15px;
+        scale: 0;
+        transition: scale .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        
+        & p{
+            font-size: 1.2rem;
+        }
+
+        & .confirm-restart__options{
+            width: 100%;
+            display: flex;
+            gap: 2rem;
+            justify-content: space-around;
+        }
+
+        &.open{
+            scale: 1;
+        }
+    }
 }
+
+
 
 
 @media (max-width: 1024px) {
@@ -678,10 +751,22 @@ main.active{
 
     .goal__item.goal__item--completed {
         font-size: 1.3rem;
-            & input {
-                font-size: 1.3rem;
+        & input {
+            font-size: 1.3rem;
+        }
+    }
+
+    .app__footer{
+        & .footer__confirm-restart{
+            & p{
+                font-size: 2rem;
+            }
+
+            & .button{
+                font-size: 2rem;
             }
         }
+    }
 }
 
 @media (max-width: 769px) {
@@ -720,11 +805,7 @@ main.active{
     }
 }
 
-@media (max-width: 500px) {
-    :root{
-        font-size: 12px;
-    }
-    
+@media (max-width: 500px) {    
 
     h2 {
         font-size: 1.2rem;
