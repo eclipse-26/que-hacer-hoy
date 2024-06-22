@@ -127,6 +127,7 @@ btnAdd.addEventListener("click", ()=>{
     }
     
     createObject({objetivo:{
+        index: document.querySelectorAll(".goal__item").length + 1,
         hour: newHour(),
         min: "00",
         title: "",
@@ -301,6 +302,7 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
         min.value = formatNum(min.value)
 
         updateObject(id, {objetivo:{
+            index: index,
             hour: hour.value,
             min: min.value,
             title: title.value,
@@ -316,9 +318,9 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
 
     completeBtn.addEventListener("click", () =>{
         if(!goal.classList.contains("goal__item--completed")){
-            completeObjetive(id, goal, completed, completeBtn, hour, min, title);
+            completeObjetive(id, index, goal, completed, completeBtn, hour, min, title);
         }else{
-            updateCompleteState(id, goal, completeBtn, completed, hour, min, title);
+            updateCompleteState(id, index, goal, completeBtn, completed, hour, min, title);
         }
         
     })
@@ -340,7 +342,7 @@ const createSpanComplete = (isCompleted, completeBtn) =>{
     }    
 }
 
-const updateCompleteState = (id, goal, completeBtn, completed, hour, min, title) =>{
+const updateCompleteState = (id, index, goal, completeBtn, completed, hour, min, title) =>{
     goal.classList.toggle("goal__item--completed");
         createSpanComplete(goal.classList.contains("goal__item--completed"), completeBtn);
 
@@ -355,9 +357,9 @@ const updateCompleteState = (id, goal, completeBtn, completed, hour, min, title)
         }else{
             isComplete = true;
         } 
-        
 
         updateObject(id, {objetivo:{
+            index: index,
             hour: hour.value,
             min: min.value,
             title: title.value,
@@ -365,7 +367,7 @@ const updateCompleteState = (id, goal, completeBtn, completed, hour, min, title)
         }})
 }
 
-const completeObjetive = (id, goal, completed, completeBtn, hour, min, title) =>{
+const completeObjetive = (id, index, goal, completed, completeBtn, hour, min, title) =>{
     const completeContainer = document.createElement("DIV");
     const completeOptions = document.createElement("DIV");
     const completeText = document.createElement("P");
@@ -404,7 +406,7 @@ const completeObjetive = (id, goal, completed, completeBtn, hour, min, title) =>
         goalCompleteSound.currentTime = 0;
         goalCompleteSound.play();
 
-        updateCompleteState(id, goal, completeBtn, completed, hour, min, title);
+        updateCompleteState(id, index, goal, completeBtn, completed, hour, min, title);
     })
     
 }
@@ -498,9 +500,21 @@ const readObjects = () => {
         
         if (cursor.result) {
             document.querySelector("main").classList.add("active");
+
+            if (cursor.result.value.objetivo.index != index || cursor.result.value.objetivo.index == ""){
+                console.log("no iguales");
+                updateObject(cursor.result.key, {objetivo:{
+                    index: index,
+                    hour: cursor.result.value.objetivo.hour,
+                    min: cursor.result.value.objetivo.min,
+                    title: cursor.result.value.objetivo.title,
+                    completed: cursor.result.value.objetivo.completed
+                }})
+            }
+
             let element = createGoal(
                 cursor.result.key, 
-                index, 
+                cursor.result.value.objetivo.index, 
                 cursor.result.value.objetivo.hour, 
                 cursor.result.value.objetivo.min, 
                 cursor.result.value.objetivo.title, 
