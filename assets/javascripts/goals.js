@@ -236,6 +236,7 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
     min.step = 15;
 
     goal.setAttribute("draggable", true)
+    goal.setAttribute("data-index", index)
 
     goal.appendChild(info);
     info.appendChild(num);
@@ -503,6 +504,7 @@ const readObjects = () => {
     goalsContainer.innerHTML = "";
 
     let index = 1;
+    
     let newExp = 100;
     let goalsCompletedCount = 0;
 
@@ -510,17 +512,20 @@ const readObjects = () => {
         
         if (cursor.result) {
             document.querySelector("main").classList.add("active");
-
-            if (cursor.result.value.objetivo.index != index || cursor.result.value.objetivo.index == ""){
-                console.log("no iguales");
-                updateObject(cursor.result.key, {objetivo:{
-                    index: index,
-                    hour: cursor.result.value.objetivo.hour,
-                    min: cursor.result.value.objetivo.min,
-                    title: cursor.result.value.objetivo.title,
-                    completed: cursor.result.value.objetivo.completed
-                }})
-            }
+            
+            // if (cursor.result.value.objetivo.index != index || cursor.result.value.objetivo.index == ""){
+            //     console.log("index-old: " + cursor.result.value.objetivo.index);
+            //     console.log("index-new: " + index);
+                
+            //     console.log("no iguales");
+            //     updateObject(cursor.result.key, {objetivo:{
+            //         index: index,
+            //         hour: cursor.result.value.objetivo.hour,
+            //         min: cursor.result.value.objetivo.min,
+            //         title: cursor.result.value.objetivo.title,
+            //         completed: cursor.result.value.objetivo.completed
+            //     }})
+            // }
 
             let element = createGoal(
                 cursor.result.key, 
@@ -537,8 +542,6 @@ const readObjects = () => {
             
             fragment.appendChild(element);
             cursor.result.continue();
-            
-            
 
             index++;
         } else {
@@ -560,6 +563,7 @@ const readObjects = () => {
                 
             }
 
+            reorder();
             
         }
 
@@ -599,15 +603,6 @@ const transationIDB = (mode, msg) => {
 // ----------------------------------------------->
 
     let cols = document.querySelectorAll('.goal__list .goal__item');
-    // hook up event handlers
-    // [].forEach.call(cols, function (col) {
-    //     col.addEventListener('dragstart', handleDragStart, false);
-    //     col.addEventListener('dragenter', handleDragEnter, false)
-    //     col.addEventListener('dragover', handleDragOver, false);
-    //     col.addEventListener('dragleave', handleDragLeave, false);
-    //     col.addEventListener('drop', handleDrop, false);
-    //     col.addEventListener('dragend', handleDragEnd, false);
-    // });
 
     let dragSrcEl = null;
     function handleDragStart(e) {
@@ -673,10 +668,22 @@ const transationIDB = (mode, msg) => {
                 }
                 cursor.result.continue();
             } else {
-                    location.reload();
+                    readObjects();
                 }
         });
+        
     }
+
+    function reorder() {
+        let orderedString = '';
+        [...document.querySelectorAll('.goal__item')].sort(function(a, b) {
+          return a.dataset.index - b.dataset.index
+      
+        }).forEach(function(item) {
+          document.querySelector('.goal__list').appendChild(item)
+        })
+      
+      }
 
     function handleDrop(e) {
 
@@ -697,8 +704,8 @@ const transationIDB = (mode, msg) => {
                 // this.innerHTML = e.dataTransfer.getData('text');
             }
 
-            console.log(elementDrag)
-            console.log(elementDrop)
+            // console.log(elementDrag)
+            // console.log(elementDrop)
 
             changeIndex(elementDrag, elementDrop);
         }
