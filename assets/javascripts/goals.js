@@ -235,6 +235,8 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
     min.min = 0;
     min.step = 15;
 
+    goal.setAttribute("draggable", true)
+
     goal.appendChild(info);
     info.appendChild(num);
     info.appendChild(time);
