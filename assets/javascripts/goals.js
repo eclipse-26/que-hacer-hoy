@@ -326,6 +326,14 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
         }
         
     })
+
+
+    goal.addEventListener('dragstart', handleDragStart, false);
+    goal.addEventListener('dragenter', handleDragEnter, false)
+    goal.addEventListener('dragover', handleDragOver, false);
+    goal.addEventListener('dragleave', handleDragLeave, false);
+    goal.addEventListener('drop', handleDrop, false);
+    goal.addEventListener('dragend', handleDragEnd, false);
         
 
     return goal;
@@ -590,3 +598,124 @@ const transationIDB = (mode, msg) => {
 
 // ----------------------------------------------->
 
+    let cols = document.querySelectorAll('.goal__list .goal__item');
+    // hook up event handlers
+    // [].forEach.call(cols, function (col) {
+    //     col.addEventListener('dragstart', handleDragStart, false);
+    //     col.addEventListener('dragenter', handleDragEnter, false)
+    //     col.addEventListener('dragover', handleDragOver, false);
+    //     col.addEventListener('dragleave', handleDragLeave, false);
+    //     col.addEventListener('drop', handleDrop, false);
+    //     col.addEventListener('dragend', handleDragEnd, false);
+    // });
+
+    let dragSrcEl = null;
+    function handleDragStart(e) {
+        if (e.target.className.indexOf('goal__item') > -1) {
+            dragSrcEl = e.target;
+            dragSrcEl.style.opacity = '0.5';
+            let dt = e.dataTransfer;
+            dt.effectAllowed = 'move';
+            dt.setData('text', dragSrcEl.innerHTML);
+
+        }
+    }
+    function handleDragOver(e) {
+        if (dragSrcEl) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+    }
+    function handleDragEnter(e) {
+        if (dragSrcEl) {
+            e.target.classList.add('over');
+        }
+    }
+    function handleDragLeave(e) {
+        if (dragSrcEl) {
+            e.target.classList.remove('over');
+        }
+    }
+    function handleDragEnd(e) {
+        dragSrcEl = null;
+        e.target.style.opacity = '';
+        e.target.classList.remove('over');
+    }
+
+
+    const changeIndex = (elementDrag, elementDrop) =>{
+
+        const cursor = transationIDB("readonly", "").openCursor();
+    
+        cursor.addEventListener("success", () => {
+            
+            if (cursor.result) {
+                console.log(cursor.result.value);
+                
+                if (cursor.result.value.objetivo.index == elementDrag){
+                    console.log("Actualizado Drag");
+                    updateObject(cursor.result.key, {objetivo:{
+                        index: elementDrop,
+                        hour: cursor.result.value.objetivo.hour,
+                        min: cursor.result.value.objetivo.min,
+                        title: cursor.result.value.objetivo.title,
+                        completed: cursor.result.value.objetivo.completed
+                    }})
+                }else if(cursor.result.value.objetivo.index == elementDrop){
+                    console.log("Actualizado Drop");
+                    updateObject(cursor.result.key, {objetivo:{
+                        index: elementDrag,
+                        hour: cursor.result.value.objetivo.hour,
+                        min: cursor.result.value.objetivo.min,
+                        title: cursor.result.value.objetivo.title,
+                        completed: cursor.result.value.objetivo.completed
+                    }})
+                }
+                cursor.result.continue();
+            } else {
+                    location.reload();
+                }
+        });
+    }
+
+    function handleDrop(e) {
+
+        
+
+        if (dragSrcEl) {
+
+            let elementDrop = e.target.getElementsByClassName("goal__info__num")[0].textContent;
+            const elementDrag = dragSrcEl.getElementsByClassName("goal__info__num")[0].textContent;
+            
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            if (dragSrcEl != this) {
+                swapDom(dragSrcEl, this);
+                elementDrop = e.target.closest(".goal__item").getElementsByClassName("goal__info__num")[0].textContent;
+                // dragSrcEl.innerHTML = e.target.innerHTML;
+                // this.innerHTML = e.dataTransfer.getData('text');
+            }
+
+            console.log(elementDrag)
+            console.log(elementDrop)
+
+            changeIndex(elementDrag, elementDrop);
+        }
+    }
+
+    
+
+    // https://stackoverflow.com/questions/9732624/how-to-swap-dom-child-nodes-in-javascript
+    function swapDom(a,b) {
+        let aParent = a.parentNode;
+        let bParent = b.parentNode;
+        let aHolder = document.createElement("div");
+        let bHolder = document.createElement("div");
+        aParent.replaceChild(aHolder, a);
+        bParent.replaceChild(bHolder, b);
+        aParent.replaceChild(b, aHolder);
+        bParent.replaceChild(a, bHolder);    
+    }
+
+// ------------------------------------------>

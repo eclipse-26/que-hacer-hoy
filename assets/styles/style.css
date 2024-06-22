@@ -8,6 +8,10 @@ ol, li, ul{
 }
 
 
+[draggable] {
+    user-select: none;
+}
+
   
   @supports (font-variation-settings: normal) {
     @font-face {
