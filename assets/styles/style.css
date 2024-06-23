@@ -34,7 +34,10 @@ ol, li, ul{
     --color-tertiary: #0094FF;
     --color-dark: #1D1D1D;
     --color-light: #E0E0E0;
+    --color-light-40: #696969;
+    --color-light-80: #373737;
     --color-confirm: #C7FF80;
+    --color-confirm-50: rgba(199, 255, 128, .5);
     --color-cancel: #FF5959;
 
     font-family: "JetBrains Mono", monospace;
@@ -201,6 +204,10 @@ main.active{
         & a{
             right: 0;
         }
+    }
+
+    & .goal__list__options__item{
+        scale: 1;
     }
 }
 
@@ -371,6 +378,8 @@ main.active{
 
 .goal__list{
     width: 100%;
+    display: flex;
+    flex-direction: column;
     container-type: inline-size;
     container-name: goals;
     margin-bottom: 1rem;
@@ -402,7 +411,7 @@ main.active{
     border-bottom: 3px solid #e0e0e063;
     font-weight: 400;
     font-variation-settings: 'wght' 400;
-    transition: font-size .4s ease, font-variation-settings .3s ease-in-out;
+    transition: font-size .4s ease, font-variation-settings .3s ease-in-out, background-color .3s ease, border-radius .3s ease;;
 
     &:hover{
         font-weight: 800;
@@ -671,6 +680,83 @@ main.active{
 .open{
     clip-path: inset(0);
 }
+
+.goal__list__options{
+    
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 1rem 1rem;
+    gap: 1rem;
+    justify-content: flex-start;
+    & .goal__list__options__item{
+        scale: 0;
+        cursor: pointer;
+        border: 1px solid var(--color-light-40);
+        border-radius: 5px;
+        color: var(--color-light-40);
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        transition: color .3s ease-out, background-color .3s ease-out, scale .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        user-select: none;
+        &:hover{
+            color: var(--color-light);
+            border-color: var(--color-light);
+        }
+        &.active{
+            background-color: var(--color-primary);
+            color: var(--color-dark);
+            border-color: var(--color-dark);
+        }
+    }
+}
+
+.goal__list{
+    box-sizing: border-box;
+    gap: 0;
+    padding: 0;
+    transition: gap .3s ease, padding .3s ease;
+}
+
+.goal__list.active--move{
+    padding: 1rem;
+    gap: 1rem;
+    
+    & .goal__item{
+        background-color: var(--color-light-80);
+        border-radius: 10px;
+        user-select: none;
+        & * {
+            pointer-events: none;
+        }
+
+        &:hover{
+            cursor: grab;
+
+            & .goal__info__exp{
+                opacity: 0;
+            }
+
+            & .goal__options{
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        &:active{
+            background-color: var(--color-primary);
+        }
+
+        &:active{
+            cursor: grabbing;
+        }
+
+        &.over{
+            background-color: var(--color-confirm-50);
+        }
+    }
+}
+
 
 .app__footer {
     display: flex;

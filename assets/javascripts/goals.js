@@ -7,7 +7,8 @@ let btnAdd = document.getElementById("add-goal__btn");
 const header = document.getElementById("app__header");
 const footer = document.getElementById("app__footer");
 const btnRestart = document.getElementById("footer__restart-btn");
-const containerAdd = document.getElementById("add-goal")
+const containerAdd = document.getElementById("add-goal");
+const btnMoveGoals = document.getElementById("goal__list__options__item-move");
 
 const goalsCompletedContainer = document.getElementById("goal-progress");
 const goalsCount = document.getElementById("goals__count");
@@ -56,6 +57,29 @@ const newHour = () =>{
     return formatNum(newHour);
 }
 
+
+btnMoveGoals.addEventListener("click", () =>{
+    btnMoveGoals.classList.toggle("active");
+    goalsContainer.classList.toggle("active--move");
+
+    checkMoveActive();
+
+})
+
+const checkMoveActive = () =>{
+
+    const goalItems = document.querySelectorAll(".goal__item");
+
+    if(btnMoveGoals.classList.contains("active")){
+        for(let i = 0; i < goalItems.length; i++){
+            goalItems[i].setAttribute("draggable", true);
+        }
+    }else{
+        for(let i = 0; i < goalItems.length; i++){
+            goalItems[i].removeAttribute("draggable");
+        }
+    }
+}
 
 btnRestart.addEventListener("click", ()=>{
     if(!document.querySelector(".footer__confirm-restart")){
@@ -203,9 +227,7 @@ const experienceWined = () =>{
             }, 5
             )
         }
-    }
-    
-              
+    }          
 }
 
 const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
@@ -245,7 +267,6 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
     min.min = 0;
     min.step = 15;
 
-    goal.setAttribute("draggable", true)
     goal.setAttribute("data-index", index)
 
     goal.appendChild(info);
@@ -498,7 +519,7 @@ idbRequest.addEventListener("success", () => {
 })
 
 idbRequest.addEventListener("error", () => {
-    // console.log("Ha ocurrido un error al abrir la base de datos");
+    console.log("Ha ocurrido un error al abrir la base de datos");
 })
 
 
@@ -523,20 +544,6 @@ const readObjects = () => {
         if (cursor.result) {
             document.querySelector("main").classList.add("active");
             
-            // if (cursor.result.value.objetivo.index != index || cursor.result.value.objetivo.index == ""){
-            //     console.log("index-old: " + cursor.result.value.objetivo.index);
-            //     console.log("index-new: " + index);
-                
-            //     console.log("no iguales");
-            //     updateObject(cursor.result.key, {objetivo:{
-            //         index: index,
-            //         hour: cursor.result.value.objetivo.hour,
-            //         min: cursor.result.value.objetivo.min,
-            //         title: cursor.result.value.objetivo.title,
-            //         completed: cursor.result.value.objetivo.completed
-            //     }})
-            // }
-
             let element = createGoal(
                 cursor.result.key, 
                 cursor.result.value.objetivo.index,
@@ -574,6 +581,7 @@ const readObjects = () => {
             }
 
             reorder();
+            checkMoveActive();
             
         }
 
@@ -603,7 +611,7 @@ const transationIDB = (mode, msg) => {
     const objStore = IDBTransation.objectStore("objetivosTable");
 
     IDBTransation.addEventListener("complete", () => {
-        // console.log(msg)
+
     })
 
     return objStore;
@@ -622,7 +630,7 @@ const transationIDB = (mode, msg) => {
             let dt = e.dataTransfer;
             dt.effectAllowed = 'move';
             dt.setData('text', dragSrcEl.innerHTML);
-
+            // e.target.classList.add('active');
         }
     }
     function handleDragOver(e) {
@@ -689,10 +697,7 @@ const transationIDB = (mode, msg) => {
         let orderedString = '';
         [...document.querySelectorAll('.goal__item')].sort(function(a, b) {
           return a.dataset.index - b.dataset.index
-      
         }).forEach(function(item) {
-            
-            console.log(item)
             item.getElementsByClassName("goal__info__num")[0].textContent = num;
             document.querySelector('.goal__list').appendChild(item)
             num++;
@@ -717,20 +722,12 @@ const transationIDB = (mode, msg) => {
             if (dragSrcEl != this) {
                 swapDom(dragSrcEl, this);
                 elementDrop = e.target.closest(".goal__item").dataset.index;
-                // dragSrcEl.innerHTML = e.target.innerHTML;
-                // this.innerHTML = e.dataTransfer.getData('text');
             }
-
-            // console.log(elementDrag)
-            // console.log(elementDrop)
 
             changeIndex(elementDrag, elementDrop);
         }
     }
 
-    
-
-    // https://stackoverflow.com/questions/9732624/how-to-swap-dom-child-nodes-in-javascript
     function swapDom(a,b) {
         let aParent = a.parentNode;
         let bParent = b.parentNode;
