@@ -125,9 +125,19 @@ btnAdd.addEventListener("click", ()=>{
     if(goalsContainer.childElementCount == 0){
         header.classList.add("active");
     }
+
+    let dataIndexGoals = document.querySelectorAll(".goal__item");
+    let newIndex = 0;
+
+    for(let i = 0; i < dataIndexGoals.length; i++){
+        console.log(dataIndexGoals[i].dataset.index);
+        if(newIndex <= dataIndexGoals[i].dataset.index){
+            newIndex = parseInt(dataIndexGoals[i].dataset.index) + 1;
+        }
+    }
     
     createObject({objetivo:{
-        index: document.querySelectorAll(".goal__item").length + 1,
+        index: newIndex,
         hour: newHour(),
         min: "00",
         title: "",
@@ -255,7 +265,7 @@ const createGoal = (id, index, newHour, newMin, newTitle, newExp, completed) =>{
 
 
 
-    num.textContent = index;
+    num.textContent = "→";
     hour.value = newHour;
     min.value = newMin;
     exp.textContent = newExp;
@@ -529,7 +539,7 @@ const readObjects = () => {
 
             let element = createGoal(
                 cursor.result.key, 
-                cursor.result.value.objetivo.index, 
+                cursor.result.value.objetivo.index,
                 cursor.result.value.objetivo.hour, 
                 cursor.result.value.objetivo.min, 
                 cursor.result.value.objetivo.title, 
@@ -675,12 +685,17 @@ const transationIDB = (mode, msg) => {
     }
 
     function reorder() {
+        let num = 1;
         let orderedString = '';
         [...document.querySelectorAll('.goal__item')].sort(function(a, b) {
           return a.dataset.index - b.dataset.index
       
         }).forEach(function(item) {
-          document.querySelector('.goal__list').appendChild(item)
+            
+            console.log(item)
+            item.getElementsByClassName("goal__info__num")[0].textContent = num;
+            document.querySelector('.goal__list').appendChild(item)
+            num++;
         })
       
       }
@@ -691,15 +706,17 @@ const transationIDB = (mode, msg) => {
 
         if (dragSrcEl) {
 
-            let elementDrop = e.target.getElementsByClassName("goal__info__num")[0].textContent;
-            const elementDrag = dragSrcEl.getElementsByClassName("goal__info__num")[0].textContent;
+            console.log(e.target.dataset.index)
+
+            let elementDrop = e.target.dataset.index;
+            const elementDrag = dragSrcEl.dataset.index;
             
             e.stopPropagation();
             e.stopImmediatePropagation();
             e.preventDefault();
             if (dragSrcEl != this) {
                 swapDom(dragSrcEl, this);
-                elementDrop = e.target.closest(".goal__item").getElementsByClassName("goal__info__num")[0].textContent;
+                elementDrop = e.target.closest(".goal__item").dataset.index;
                 // dragSrcEl.innerHTML = e.target.innerHTML;
                 // this.innerHTML = e.dataTransfer.getData('text');
             }

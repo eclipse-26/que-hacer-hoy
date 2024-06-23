@@ -8,9 +8,9 @@ ol, li, ul{
 }
 
 
-[draggable] {
+/* [draggable] {
     user-select: none;
-}
+} */
 
   
   @supports (font-variation-settings: normal) {
